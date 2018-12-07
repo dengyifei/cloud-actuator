@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UpController {
+	
 	@Autowired
 	private MyHealthChecker myHealthChecker;
 	@RequestMapping("/")
