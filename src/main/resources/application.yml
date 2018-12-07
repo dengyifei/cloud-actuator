@@ -1,0 +1,50 @@
+spring:
+  profiles:
+    active: dev
+
+eureka:
+  instance: 
+    # 每间隔1s，向服务端发送一次心跳，证明自己依然”存活“
+    lease-renewal-interval-in-seconds: 5
+    # 告诉服务端，如果我2s之内没有给你发心跳，就代表我“死”了，将我踢出掉。
+    lease-expiration-duration-in-seconds: 8
+    prefer-ip-address: true
+    # instanceId:
+  client:
+    serviceUrl:
+      defaultZone: http://eurekaserver.com:8761/eureka/
+    healthcheck:
+      enabled: true #使用health端点来代替心跳表明服务是否可用，反应到eureka server ui上服务的UP还是DOWN
+---
+
+spring:
+  profiles: dev
+
+  application:
+    name: actuator-1
+server:
+  port: 8083
+
+management:
+  security:
+    enabled: true
+  endpoint:
+    health.show-details: always
+    shutdown.enabled: true
+  endpoints.web.exposure.include: health,info,shutdown
+
+security:
+  user:
+    name: root
+    password: 123
+  
+info:
+  app:
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+    spring-boot-version: "@project.parent.version@"
+    java: ${java.version}
+    profiles: ${spring.profiles.active}
+    port: ${server.port}
+    path: ${server.servlet.path}
